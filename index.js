@@ -1,71 +1,60 @@
-// Function to retrieve data from localStorage and populate the table
-function displayUserData() {
-  const storedUserData = JSON.parse(localStorage.getItem("userDetails")) || [];
-  const table = document.getElementById('userDataTable');
-  let tableContent = ``;
-  
-  // Loop through each user data and create table rows
-  storedUserData.forEach(user => {
-      tableContent += `<tr class="border-2 border-gray-200 bg-gray-400">
-          <td class="py-2 px-4 text-center">${user.fullName}</td>
-          <td class="py-2 px-4 text-center">${user.emailAddress}</td>
-          <td class="py-2 px-4 text-center">${user.passwordInput}</td>
-          <td class="py-2 px-4 text-center">${user.dateOfBirth}</td>
-          <td class="py-2 px-4 text-center">${user.acceptedTerms ? 'true' : 'false'}</td>
+// function that writes data to the table from localStorage
+function populateTable() {
+    const tableData = JSON.parse(localStorage.getItem("details")) || [];
+    let table = document.getElementById('table');
+    let tableContent = ``;
+    tableData.forEach(element => {
+      tableContent+= `<tr class="border-2 border-stone-200 bg-stone-400">
+          <td class="py-2 px-4 text-center">${element.name}</td>
+          <td class="py-2 px-4 text-center">${element.email}</td>
+          <td class="py-2 px-4 text-center">${element.password}</td>
+          <td class="py-2 px-4 text-center">${element.dob}</td>
+          <td class="py-2 px-4 text-center">true</td>
       </tr>`;
-  });
-  
-  // Set the innerHTML of the table
-  table.innerHTML = `
-      <tr class="border-2 border-gray-200 bg-gray-400">
-          <th>Name</th>
-          <th>Email</th>
-          <th>Password</th>
-          <th>Dob</th>
-          <th>Accepted terms?</th>
+    });
+    
+    table.innerHTML = `
+    <tr class="border-2 border-stone-200 bg-stone-400">
+      <th >Name</th>
+      <th>Email</th>
+      <th>Password</th>
+      <th>Dob</th>
+      <th>Accepted terms?</th>
       </tr>
-      ${tableContent}`;
-}
+    ${tableContent}`;
+  }
 
-// Function triggered on form submission
-function handleFormSubmit(event) {
-  event.preventDefault(); // Prevent the default form submission behavior
+  // Function that is called when form is submitted
+  function submit() {
+    const user = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      dob: document.getElementById("dob").value,
+      password: document.getElementById("password").value,
+      tnc: document.getElementById("acceptTerms").value,
+    };
+    let arr = JSON.parse(localStorage.getItem("details")) || [];
+    arr.push(user);
+    const data = arr;
+    localStorage.setItem("details", JSON.stringify(data));
+    
+  }
 
-  // Get user data from form inputs
-  const user = {
-      fullName: document.getElementById("fullName").value,
-      emailAddress: document.getElementById("emailAddress").value,
-      dateOfBirth: document.getElementById("dateOfBirth").value,
-      passwordInput: document.getElementById("passwordInput").value,
-      acceptedTerms: document.getElementById("acceptTermsCheckbox").checked,
-  };
+  // Set min and max dates
+  var today = new Date();
+  var maxDate = new Date(today);
+  maxDate.setFullYear(maxDate.getFullYear() - 18);
+  var minDate = new Date(today);
+  minDate.setFullYear(minDate.getFullYear() - 56);
+  console.log(maxDate.toISOString().slice(0, 10));
+  document
+    .getElementById("dob")
+    .setAttribute("max", maxDate.toISOString().slice(0, 10));
+  document
+    .getElementById("dob")
+    .setAttribute("min", minDate.toISOString().slice(0, 10));
+  document.getElementById("form").addEventListener("submit", submit);
 
-  // Retrieve existing data from localStorage or initialize an empty array
-  let userList = JSON.parse(localStorage.getItem("userDetails")) || [];
-
-  // Add the new user data to the array
-  userList.push(user);
-
-  // Update localStorage with the modified array
-  localStorage.setItem("userDetails", JSON.stringify(userList));
-
-  // Refresh the displayed table
-  displayUserData();
-}
-
-// Set minimum and maximum dates for the Date of Birth input
-const today = new Date();
-const maxDate = new Date(today);
-maxDate.setFullYear(maxDate.getFullYear() - 18);
-const minDate = new Date(today);
-minDate.setFullYear(minDate.getFullYear() - 56);
-
-// Set the min and max attributes for the Date of Birth input
-document.getElementById("dateOfBirth").setAttribute("max", maxDate.toISOString().slice(0, 10));
-document.getElementById("dateOfBirth").setAttribute("min", minDate.toISOString().slice(0, 10));
-
-// Attach the submit event listener to the form
-document.getElementById("registrationForm").addEventListener("submit", handleFormSubmit);
-
-// Call the function to initially populate the table
-displayUserData();
+  // populateTable function call that adds all data in localStorage
+  populateTable();
+  
