@@ -1,5 +1,3 @@
-// index.js
-
 // Function to retrieve data from localStorage and populate the table
 function displayUserData() {
   const storedUserData = JSON.parse(localStorage.getItem("userDetails")) || [];
