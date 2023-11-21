@@ -20,11 +20,11 @@ function displayUserData() {
   // Set the innerHTML of the table
   table.innerHTML = `
       <tr class="border-2 border-gray-200 bg-gray-400">
-          <th>Full Name</th>
-          <th>Email Address</th>
+          <th>Name</th>
+          <th>Email</th>
           <th>Password</th>
-          <th>Date of Birth</th>
-          <th>Accepted Terms?</th>
+          <th>Dob</th>
+          <th>Accepted terms?</th>
       </tr>
       ${tableContent}`;
 }
